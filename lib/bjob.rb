@@ -22,14 +22,8 @@ module BJob
       instance = new
 
       instance.batch(instance.items(filter)) do |items|
-        if BJob.interactive?
-          Batch.each(items) do |item|
-            instance.process(item)
-          end
-        else
-          items.each do |item|
-            instance.process(item)
-          end
+        Batch.each(items) do |item|
+          instance.process(item)
         end
       end
     end
@@ -55,14 +49,4 @@ module BJob
       super(&block)
     end
   end
-
-  def self.interactive=(value)
-    @interactive = value
-  end
-
-  def self.interactive?
-    !! @interactive
-  end
-
-  self.interactive = false
 end
