@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+require_relative "../vendor/clap"
+
+if File.exist?(".bjobrc")
+  ARGV.concat(File.read(".bjobrc").split("\n"))
+end
+
+exit(1) if ARGV.empty?
+
+ENV["BATCH_INTERACTIVE"] = ENV["PS1"] ? "1" : "0"
+
+args = Clap.run ARGV,
+  "-r" => -> file { require file },
+  "-i" => -> { ENV["BATCH_INTERACTIVE"] = "1" },
+  "-s" => -> { ENV["BATCH_INTERACTIVE"] = "0" }
+
+constant = Module.const_get(args.first)
+
+constant.run
