@@ -2,6 +2,18 @@
 
 require_relative "../vendor/clap"
 
+class Args < Hash
+  def [](item)
+    return super(item) if include?(item)
+
+    if item.start_with?("--")
+      key = item[2..-1]
+
+      -> value { fetch(:*).call(key, value) }
+    end
+  end
+end
+
 if File.exist?(".bjobrc")
   ARGV.concat(File.read(".bjobrc").split("\n"))
 end
@@ -10,11 +22,15 @@ exit(1) if ARGV.empty?
 
 ENV["BATCH_INTERACTIVE"] = ENV["PS1"] ? "1" : "0"
 
-args = Clap.run ARGV,
+filter = {}
+
+args = Clap.run ARGV, Args[
   "-r" => -> file { require file },
   "-i" => -> { ENV["BATCH_INTERACTIVE"] = "1" },
-  "-s" => -> { ENV["BATCH_INTERACTIVE"] = "0" }
+  "-s" => -> { ENV["BATCH_INTERACTIVE"] = "0" },
+  :*   => -> key, value { filter[key.to_sym] = value }
+]
 
 constant = Module.const_get(args.first)
 
-constant.run
+constant.run((filter if filter.size > 0))

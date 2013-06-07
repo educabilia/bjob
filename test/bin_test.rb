@@ -83,4 +83,10 @@ scope do
 
     assert_empty err
   end
+
+  test "parses command line arguments as a filter" do |bjob, _, capture, root|
+    out, err, status = bjob.(%w[-r ./test/jobs/ten Ten --count 5])
+
+    assert_equal 5, Dir["test/tmp/ten/*.txt"].size
+  end
 end

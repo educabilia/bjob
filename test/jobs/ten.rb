@@ -17,6 +17,10 @@ class Ten < BJob::Job
   end
 
   def items(filter = nil)
-    (0..9).to_a
+    if filter && filter.include?(:count)
+      filter.fetch(:count).to_i.times.to_a
+    else
+      (0..9).to_a
+    end
   end
 end
