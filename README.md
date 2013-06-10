@@ -78,4 +78,9 @@ Installation
 
     $ gem install bjob
 
+License
+-------
+
+See `UNLICENSE`. With love, from [Educabilia](http://educabilia.com).
+
 [1]: https://github.com/djanowski/batch
