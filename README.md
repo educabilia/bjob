@@ -10,8 +10,8 @@ by default.
 Jobs are Ruby classes and can be invoked from anywhere in code. However, since
 it's so common to run them straight from the command line, a CLI is built in.
 
-Motivation: Rake sucks
-----------------------
+Motivation
+----------
 
 In my experience, you have two types of Rake tasks:
 
